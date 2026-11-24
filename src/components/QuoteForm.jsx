@@ -31,11 +31,13 @@ export default function QuoteForm({ initialData, onClose }) {
         </label>
         <textarea
           name="quote"
-          className="textarea textarea-bordered w-full"
+          className={`textarea textarea-bordered w-full ${state?.fieldErrors?.quote ? "textarea-error" : ""}`}
           defaultValue={initialData?.quote ?? ""}
           rows={3}
-          required
         />
+        {state?.fieldErrors?.quote && (
+          <span className="text-error text-sm mt-1">{state.fieldErrors.quote[0]}</span>
+        )}
       </div>
 
       <div className="form-control">
@@ -45,23 +47,21 @@ export default function QuoteForm({ initialData, onClose }) {
         <input
           name="author"
           type="text"
-          className="input input-bordered w-full"
+          className={`input input-bordered w-full ${state?.fieldErrors?.author ? "input-error" : ""}`}
           defaultValue={initialData?.author ?? ""}
-          required
         />
+        {state?.fieldErrors?.author && (
+          <span className="text-error text-sm mt-1">{state.fieldErrors.author[0]}</span>
+        )}
       </div>
 
-      {state?.error && <div className="alert alert-error text-sm">{state.error}</div>}
+      {state?.error && !state?.fieldErrors && (
+        <div className="alert alert-error text-sm">{state.error}</div>
+      )}
 
       <div className="pt-2">
         <button type="submit" className="btn btn-primary w-full" disabled={pending}>
-          {pending ? (
-            <span className="loading loading-spinner loading-sm"></span>
-          ) : initialData ? (
-            "Сохранить изменения"
-          ) : (
-            "Добавить"
-          )}
+          {pending ? <span className="loading loading-spinner loading-sm"></span> : initialData ? "Сохранить изменения" : "Добавить"}
         </button>
       </div>
     </form>
